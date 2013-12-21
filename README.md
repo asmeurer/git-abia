@@ -1,6 +1,6 @@
 # git abia
 
-Austin is awesome. ABIA (Austin International Airport), not so much.
+Austin is awesome. ABIA (Austin-Bergstrom International Airport), not so much.
 
 One thing that sucks about ABIA is that the wireless there blocks the ports
 used by ssh and git protocols, meaning that if your git remotes are set to one
