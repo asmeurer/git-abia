@@ -11,6 +11,23 @@
 # https counterparts. This has only been tested with GitHub, but it should
 # work for any service that uses the same url format.
 
+# Installation:
+
+# Just put git-abia somewhere in your PATH.
+
+# USAGE:
+
+# Replace a command like
+#
+# $ git fetch username
+#
+# with
+#
+# $ git abia fetch username
+
+# Note: I suck at bash. This whole thing could probably be done better. If you
+# have ideas, pull requests are welcome.
+
 REMOTE=$2
 
 case $1 in
