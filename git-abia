@@ -30,6 +30,7 @@
 
 REMOTE=$2
 
+# TODO: $1 is not the remote if there are commandline flags
 case $1 in
     fetch | pull)
 
