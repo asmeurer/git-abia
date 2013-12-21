@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Austin is awesome. Austin airport, not so much.
+
+# Neither ssh nor git (git://) protocols work there. Https does, but if you
+# set your remotes to ssh or git, you have to change them so that they
+# work. And you may want to change them back when you are done (after all,
+# https requires you to type your password each time you use it).
+
+# git abia fixes this by automatically switching ssh and git urls to their
+# https counterparts. This has only been tested with GitHub, but it should
+# work for any service that uses the same url format.
+
+REMOTE=$2
+
+case $1 in
+    fetch | pull)
+
+        URL=$(git remote show -n $REMOTE | grep -m 1 "Fetch \+URL" |
+              cut -d : -f 2-);
+        ;;
+    push)
+
+        URL=$(git remote show -n $REMOTE | grep -m 1 "Push \+URL" | cut -d : -f 2-);
+        ;;
+    *)
+        echo "Only fetch, pull, and push are supported";
+        exit 1
+esac
+
+if echo $URL | grep 'git://'; then
+    GIT_PROTOCOL=1
+elif echo $URL | grep 'git@'; then
+    SSH_PROTOCOL=1
+elif echo $URL | grep 'https://'; then
+    HTTPS_PROTOCOL=1
+else
+    echo "Unrecognized protocol"
+    exit 1
+fi
+
+if [ -n GIT_PROTOCOL ]; then
+    NEW_URL=$(echo $URL | sed 's$git://$https://$');
+elif [ -n SSH_PROTOCOL ]; then
+    NEW_URL=$(echo $URL | sed 's$:$/$' | sed 's$git@$https://$');
+elif [ -n HTTPS_PROTOCOL ]; then
+    NEW_URL=$URL;
+fi
+
+git remote set-url $REMOTE $NEW_URL
+git $@
+git remote set-url $REMOTE $URL
