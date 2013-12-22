@@ -39,7 +39,8 @@ case $1 in
         ;;
     push)
 
-        URL=$(git remote show -n $REMOTE | grep -m 1 "Push \+URL" | cut -d : -f 2-);
+        URL=$(git remote show -n $REMOTE | grep -m 1 "Push \+URL" |
+              cut -d : -f 2-);
         ;;
     *)
         echo "Only fetch, pull, and push are supported";
@@ -57,11 +58,11 @@ else
     exit 1
 fi
 
-if [ -n GIT_PROTOCOL ]; then
+if [[ $GIT_PROTOCOL == 1 ]]; then
     NEW_URL=$(echo $URL | sed 's$git://$https://$');
-elif [ -n SSH_PROTOCOL ]; then
+elif [[ $SSH_PROTOCOL == 1 ]]; then
     NEW_URL=$(echo $URL | sed 's$:$/$' | sed 's$git@$https://$');
-elif [ -n HTTPS_PROTOCOL ]; then
+elif [[ $HTTPS_PROTOCOL == 1 ]]; then
     NEW_URL=$URL;
 fi
 
